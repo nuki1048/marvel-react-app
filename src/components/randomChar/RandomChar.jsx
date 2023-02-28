@@ -1,45 +1,72 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
-import thor from "../../resources/img/thor.jpeg";
+import React, { Component } from "react";
 import mjolnir from "../../resources/img/mjolnir.png";
-
+import MarvelService from "../../services/MarverService";
 import "./RandomChar.scss";
-const RandomChar = () => {
-	return (
-		<div class="randomchar">
-			<div class="randomchar__block">
-				<img src={thor} alt="Random character" class="randomchar__img" />
-				<div class="randomchar__info">
-					<p class="randomchar__name">Thor</p>
-					<p class="randomchar__descr">
-						As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted
-						hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and
-						compassionate...
-					</p>
-					<div class="randomchar__btns">
-						<a href="#" class="button button__main">
-							<div class="inner">homepage</div>
-						</a>
-						<a href="#" class="button button__secondary">
-							<div class="inner">Wiki</div>
-						</a>
+class RandomChar extends Component {
+	constructor(props) {
+		super(props);
+		this.updateChar();
+	}
+	state = {
+		char: {},
+	};
+
+	marvelService = new MarvelService();
+
+	onChatLoaded = (char) => {
+		this.setState({ char });
+	};
+
+	updateChar = () => {
+		const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+		this.marvelService.getCharacter(id).then(this.onChatLoaded);
+	};
+	spliceDescr = (descr) => {
+		if (descr && descr.length >= 220) {
+			return `${descr.slice(0, 150)}...`;
+		} else {
+			return descr;
+		}
+	};
+	render() {
+		const {
+			char: { name, descr, thumnail, homepage, wiki },
+		} = this.state;
+		return (
+			<div className="randomchar">
+				<div className="randomchar__block">
+					<img src={thumnail} alt="Random character" className="randomchar__img" />
+					<div className="randomchar__info">
+						<p className="randomchar__name">{name}</p>
+						<p className="randomchar__descr">{this.spliceDescr(descr)}</p>
+						<div className="randomchar__btns">
+							<a href={homepage} className="button button__main">
+								<div className="inner">homepage</div>
+							</a>
+							<a href={wiki} class="button button__secondary">
+								<div className="inner">Wiki</div>
+							</a>
+						</div>
 					</div>
 				</div>
+				<div className="randomchar__static">
+					<p className="randomchar__title">
+						Random character for today!
+						<br />
+						Do you want to get to know him better?
+					</p>
+					<p className="randomchar__title">Or choose another one</p>
+					<button className="button button__main">
+						<div onClick={this.updateChar} className="inner">
+							try it
+						</div>
+					</button>
+					<img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
+				</div>
 			</div>
-			<div class="randomchar__static">
-				<p class="randomchar__title">
-					Random character for today!
-					<br />
-					Do you want to get to know him better?
-				</p>
-				<p class="randomchar__title">Or choose another one</p>
-				<button class="button button__main">
-					<div class="inner">try it</div>
-				</button>
-				<img src={mjolnir} alt="mjolnir" class="randomchar__decoration" />
-			</div>
-		</div>
-	);
-};
+		);
+	}
+}
 
 export default RandomChar;
