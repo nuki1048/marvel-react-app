@@ -1,5 +1,6 @@
 import { Component } from "react";
 import React from "react";
+import PropTypes from "prop-types";
 
 import Spinner from "../spinner/Spinner";
 import Skeleton from "../skeleton/Skeleton";
@@ -7,6 +8,7 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 import MarvelService from "../../services/MarverService";
 
 import "./CharInfo.scss";
+
 class CharInfo extends Component {
 	state = {
 		char: null,
@@ -64,6 +66,7 @@ class CharInfo extends Component {
 		);
 	}
 }
+
 const View = ({ char }) => {
 	const { name, descr, thumnail, homepage, wiki, comics } = char;
 	let imgStyle = { objectFit: "cover" };
@@ -106,5 +109,7 @@ const View = ({ char }) => {
 		</>
 	);
 };
-
+CharInfo.propTypes = {
+	charId: PropTypes.number,
+};
 export default CharInfo;
