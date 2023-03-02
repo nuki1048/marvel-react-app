@@ -35,6 +35,7 @@ class CharInfo extends Component {
 		this.onCharUpdating();
 		this.marvelService.getCharacter(charId).then(this.onCharLoaded).catch(this.onError);
 	};
+
 	onError = () => {
 		this.setState({ loading: false, error: true });
 	};
@@ -46,6 +47,7 @@ class CharInfo extends Component {
 	onCharUpdating = () => {
 		this.setState({ loading: true });
 	};
+
 	render() {
 		const { char, loading, error } = this.state;
 		const skeleton = char || loading || error ? null : <Skeleton />;
