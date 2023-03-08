@@ -1,54 +1,56 @@
-import React, { Component } from "react";
+import React, { useState,useEffect,useRef } from "react";
+
 import PropTypes from "prop-types";
 import MarvelService from "../../services/MarverService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
 import "./CharList.scss";
-class CharList extends Component {
-	marvelService = new MarvelService();
+const CharList = (props) => {
+	
 
-	state = {
-		posts: [],
-		loading: true,
-		newItemLoading: false,
-		error: false,
-		offset: 210,
-		charEnded: false,
-	};
-	getDataCharacters = () => {
-		this.onRequest();
-	};
+	const [posts,setPosts] = useState([]);
+	const [loading,setLoading] = useState(true);
+	const [newItemLoading,setNewItemLoading] = useState(false);
+	const [error,setError] = useState(false);
+	const [offset,setOffset] = useState(210);
+	const [charEnded, setCharEnded] = useState(false);
+	
+	const marvelService = new MarvelService();
 
-	componentDidMount() {
-		this.getDataCharacters();
-	}
-
-	onError = () => {
-		this.setState({ loading: false, error: true });
-	};
-	onRequest = (offset) => {
-		this.onCharListLoading();
-		this.marvelService.getAllCharacters(offset).then(this.onCharListLoaded).catch(this.onError);
+	
+	const getDataCharacters = () => {
+		onRequest();
 	};
 
-	onCharListLoading = () => {
-		this.setState({ newItemLoading: true });
+	useEffect(() => {
+		getDataCharacters();
+	},[]);
+
+	const onError = () => {
+		setLoading(false);
+		setError(true);
+	};
+	const onRequest = (offset) => {
+		onCharListLoading();
+		marvelService.getAllCharacters(offset).then(onCharListLoaded).catch(onError);
 	};
 
-	onCharListLoaded = (newPosts) => {
+	const onCharListLoading = () => {
+		setNewItemLoading(true);
+	};
+
+	const onCharListLoaded = (newPosts) => {
 		let ended = false;
 		if (newPosts.length < 9 || this.state.offset === 1562 - 9) {
 			ended = true;
 		}
 
-		this.setState(({ posts, offset }) => ({
-			posts: [...posts, ...newPosts],
-			loading: false,
-			newItemLoading: false,
-			offset: offset + 9,
-			charEnded: ended,
-		}));
+		setPosts(posts => [...posts, ...newPosts]);
+		setLoading(false);
+		setNewItemLoading(newItemLoading => false);
+		setOffset(offset => offset + 9);
+		setCharEnded(charEnded => ended);
 	};
 
 	renderList = (arr) => {
