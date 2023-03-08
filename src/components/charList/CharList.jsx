@@ -53,14 +53,38 @@ const CharList = (props) => {
 		setCharEnded(charEnded => ended);
 	};
 
+	itemRefs = [];
+
+	setRef = (ref) => {
+		this.itemRefs.push(ref);
+	};
+	onFocusItem = (id) => {
+		this.itemRefs.forEach((item) => item.classList.remove("char__item_selected"));
+		this.itemRefs[id].classList.add("char__item_selected");
+		this.itemRefs[id].focus();
+	};
 	renderList = (arr) => {
-		const items = arr.map((item) => {
+		const items = arr.map((item, i) => {
 			let imgStyle = { objectFit: "cover" };
 			if (item.thumnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
 				imgStyle = { objectFit: "unset" };
 			}
 			return (
-				<li class="char__item" onClick={() => this.props.onCharSelected(item.id)} key={item.id}>
+				<li
+					ref={this.setRef}
+					class="char__item"
+					onClick={() => {
+						this.props.onCharSelected(item.id);
+						this.onFocusItem(i);
+					}}
+					onKeyPress={(e) => {
+						if (e.key === " " || e.key === "Enter") {
+							this.props.onCharSelected(item.id);
+							this.focusOnItem(i);
+						}
+					}}
+					key={item.id}
+				>
 					<img style={imgStyle} src={item.thumnail} alt={item.name} />
 					<div class="char__name">{item.name}</div>
 				</li>
@@ -97,3 +121,5 @@ CharList.propTypes = {
 };
 
 export default CharList;
+
+
