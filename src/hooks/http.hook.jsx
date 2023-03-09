@@ -1,7 +1,5 @@
 import { useState, useCallback } from "react";
 
-import React from "react";
-
 const useHttp = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
