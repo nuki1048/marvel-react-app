@@ -1,23 +1,30 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+import { Link, NavLink } from "react-router-dom";
 import React from "react";
 import "./AppHeader.scss";
 const AppHeader = () => {
+	const activeStyle = {
+		color: "#9f0013",
+	};
 	return (
 		<header className="app__header">
 			<h1 className="app__title">
-				<a href="#">
+				<Link to="/">
 					<span>Marvel</span>
 					information portal
-				</a>
+				</Link>
 			</h1>
 			<nav className="app__menu">
 				<ul>
 					<li>
-						<a href="#">Characters</a>
+						<NavLink end style={({ isActive }) => (isActive ? activeStyle : undefined)} to="/">
+							Characters
+						</NavLink>
 					</li>
 					/
 					<li>
-						<a href="#">Comics</a>
+						<NavLink end style={({ isActive }) => (isActive ? activeStyle : undefined)} to="/comics">
+							Comics
+						</NavLink>
 					</li>
 				</ul>
 			</nav>
