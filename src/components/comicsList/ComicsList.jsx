@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
 import useMarvelService from "../../services/MarverService";
@@ -35,16 +35,16 @@ const ComicsList = () => {
 		setCharEnded((charEnded) => ended);
 	};
 	const renderComics = (arr) => {
-		const comics = arr.map((item) => {
+		const comics = arr.map((item, i) => {
 			const { thumnail, id, title, price } = item;
 			const priceCheck = price > 0 ? `${price}$` : "NOT AVAILABLE";
 			return (
-				<li key={id} className="comics__item">
-					<a href="#">
+				<li key={i} className="comics__item">
+					<Link to={`/comics/${id}`}>
 						<img src={thumnail} alt="ultimate war" className="comics__item-img" />
 						<div className="comics__item-name">{title}</div>
 						<div className="comics__item-price">{priceCheck}</div>
-					</a>
+					</Link>
 				</li>
 			);
 		});

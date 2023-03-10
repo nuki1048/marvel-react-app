@@ -1,7 +1,7 @@
 import React from "react";
-import AppBanner from "../appBaner/AppBanner";
-import ErrorBoundary from "../errorBoundary/ErrorBoundary";
-import ComicsList from "../comicsList/ComicsList";
+import AppBanner from "../../appBaner/AppBanner";
+import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
+import ComicsList from "../../comicsList/ComicsList";
 const ComicsPage = () => {
 	return (
 		<>
