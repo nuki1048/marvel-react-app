@@ -1,15 +1,15 @@
-import {
-	BrowserRouter,
-	createBrowserRouter,
-	createRoutesFromElements,
-	Route,
-	RouterProvider,
-	Routes,
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 import AppHeader from "../appHeader/AppHeader";
+import Spinner from "../spinner/Spinner";
 
-import { MainPage, ComicsPage, SingleComicPage, Page404 } from "../pages/Index";
+import { memo, useState } from "react";
+
+const Page404 = lazy(() => import("../pages/404/404"));
+const MainPage = lazy(() => import("../pages/mainPage/MainPage"));
+const ComicsPage = lazy(() => import("../pages/comicsPage/ComicsPage"));
+const SingleComicPage = lazy(() => import("../pages/singleComicPage/SingleComicPage"));
 
 const App = () => {
 	const router = createBrowserRouter(
@@ -24,11 +24,23 @@ const App = () => {
 	);
 	return (
 		<div className="app">
-			<main>
-				<RouterProvider router={router} />
-			</main>
+			<Suspense fallback={<Spinner />}>
+				<main>
+					<RouterProvider router={router} />
+				</main>
+			</Suspense>
 		</div>
 	);
 };
 
 export default App;
+
+const myComponent = (props) => {
+	return (
+		<div>
+			<h1>{props.name.firstName}</h1>
+			<h2>{props.name.lastName}</h2>
+			<h3>{props.age}</h3>
+		</div>
+	);
+};
