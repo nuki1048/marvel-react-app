@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../errorMessage/ErrorMessage";
+import { m, LazyMotion, domAnimation } from "framer-motion";
 
 import useMarvelService from "../../services/MarverService";
 import "./ComicsList.scss";
@@ -39,13 +40,15 @@ const ComicsList = () => {
 			const { thumnail, id, title, price } = item;
 			const priceCheck = price > 0 ? `${price}$` : "NOT AVAILABLE";
 			return (
-				<li key={i} className="comics__item">
-					<Link to={`/comics/${id}`}>
-						<img src={thumnail} alt="ultimate war" className="comics__item-img" />
-						<div className="comics__item-name">{title}</div>
-						<div className="comics__item-price">{priceCheck}</div>
-					</Link>
-				</li>
+				<LazyMotion features={domAnimation}>
+					<m.li initial={{ opacity: 0 }} animate={{ opacity: 1, transition: 0.6 }} key={i} className="comics__item">
+						<Link to={`/comics/${id}`}>
+							<img src={thumnail} alt="ultimate war" className="comics__item-img" />
+							<div className="comics__item-name">{title}</div>
+							<div className="comics__item-price">{priceCheck}</div>
+						</Link>
+					</m.li>
+				</LazyMotion>
 			);
 		});
 		return <ul className="comics__grid">{comics}</ul>;

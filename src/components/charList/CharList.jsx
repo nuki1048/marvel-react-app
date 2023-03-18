@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-
+import { m, LazyMotion, domAnimation } from "framer-motion";
 import useMarvelService from "../../services/MarverService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
@@ -19,10 +19,6 @@ const CharList = (props) => {
 		onRequest(offset, true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	// useEffect(() => {
-	// 	onRequest(true);
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [posts]);
 
 	const onRequest = (offset, initial) => {
 		initial ? setNewItemLoading(false) : setNewItemLoading(true);
@@ -56,24 +52,28 @@ const CharList = (props) => {
 				imgStyle = { objectFit: "unset" };
 			}
 			return (
-				<li
-					ref={(el) => (itemRefs.current[i] = el)}
-					class="char__item"
-					key={item.id}
-					onClick={() => {
-						props.onCharSelected(item.id);
-						onFocusItem(i);
-					}}
-					onKeyPress={(e) => {
-						if (e.key === " " || e.key === "Enter") {
+				<LazyMotion features={domAnimation}>
+					<m.li
+						ref={(el) => (itemRefs.current[i] = el)}
+						class="char__item"
+						key={item.id}
+						onClick={() => {
 							props.onCharSelected(item.id);
 							onFocusItem(i);
-						}
-					}}
-				>
-					<img style={imgStyle} src={item.thumnail} alt={item.name} />
-					<div class="char__name">{item.name}</div>
-				</li>
+						}}
+						onKeyPress={(e) => {
+							if (e.key === " " || e.key === "Enter") {
+								props.onCharSelected(item.id);
+								onFocusItem(i);
+							}
+						}}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+					>
+						<img style={imgStyle} src={item.thumnail} alt={item.name} />
+						<div class="char__name">{item.name}</div>
+					</m.li>
+				</LazyMotion>
 			);
 		});
 
