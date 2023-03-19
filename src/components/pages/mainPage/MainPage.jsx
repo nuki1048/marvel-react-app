@@ -3,13 +3,15 @@ import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import RandomChar from "../../randomChar/RandomChar";
 import CharList from "../../charList/CharList";
 import CharInfo from "../../charInfo/CharInfo";
+import AnimatedComponent from "../../animatedComponent/AnimatedComponent";
 const MainPage = () => {
 	const [selectedChar, setSelectedChar] = useState(null);
 	const onCharSelected = (id) => {
 		setSelectedChar(id);
 	};
+
 	return (
-		<>
+		<AnimatedComponent>
 			<ErrorBoundary>
 				<RandomChar />
 			</ErrorBoundary>
@@ -21,7 +23,7 @@ const MainPage = () => {
 					<CharInfo charId={selectedChar} />
 				</ErrorBoundary>
 			</div>
-		</>
+		</AnimatedComponent>
 	);
 };
 

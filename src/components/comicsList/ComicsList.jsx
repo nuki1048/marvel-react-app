@@ -13,6 +13,15 @@ const ComicsList = () => {
 	const [charEnded, setCharEnded] = useState(false);
 	const [newComicsLoading, setNewComicsLoading] = useState(false);
 
+	const listVariants = {
+		visible: { opacity: 1 },
+		hidden: { opacity: 0 },
+	};
+
+	const itemVariants = {
+		visible: { opacity: 1, y: 0 },
+		hidden: { opacity: 0, y: 100 },
+	};
 	const { getAllComics, error, loading } = useMarvelService();
 	const onRequest = (offset, initial) => {
 		initial ? setNewComicsLoading(false) : setNewComicsLoading(true);
@@ -41,7 +50,7 @@ const ComicsList = () => {
 			const priceCheck = price > 0 ? `${price}$` : "NOT AVAILABLE";
 			return (
 				<LazyMotion features={domAnimation}>
-					<m.li initial={{ opacity: 0 }} animate={{ opacity: 1, transition: 0.6 }} key={i} className="comics__item">
+					<m.li variants={itemVariants} key={i} className="comics__item">
 						<Link to={`/comics/${id}`}>
 							<img src={thumnail} alt="ultimate war" className="comics__item-img" />
 							<div className="comics__item-name">{title}</div>
@@ -51,7 +60,13 @@ const ComicsList = () => {
 				</LazyMotion>
 			);
 		});
-		return <ul className="comics__grid">{comics}</ul>;
+		return (
+			<LazyMotion features={domAnimation}>
+				<m.ul initial="hidden" animate="visible" variants={listVariants} className="comics__grid">
+					{comics}
+				</m.ul>
+			</LazyMotion>
+		);
 	};
 	const items = renderComics(comics);
 	const errorMessage = error ? <ErrorMessage /> : null;

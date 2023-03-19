@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { m, LazyMotion, domAnimation } from "framer-motion";
+
 import useMarvelService from "../../services/MarverService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
@@ -19,6 +20,10 @@ const CharList = (props) => {
 		onRequest(offset, true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+	// useEffect(() => {
+	// 	onRequest(true);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [posts]);
 
 	const onRequest = (offset, initial) => {
 		initial ? setNewItemLoading(false) : setNewItemLoading(true);
@@ -45,15 +50,28 @@ const CharList = (props) => {
 		itemRefs.current[id].classList.add("char__item_selected");
 		itemRefs.current[id].focus();
 	};
+
 	function renderList(arr) {
+		const listVariants = {
+			visible: { opacity: 1 },
+			hidden: { opacity: 0 },
+		};
+
+		const itemVariants = {
+			visible: { opacity: 1, y: 0 },
+			hidden: { opacity: 0, y: 100 },
+		};
+
 		const items = arr.map((item, i) => {
 			let imgStyle = { objectFit: "cover" };
 			if (item.thumnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
 				imgStyle = { objectFit: "unset" };
 			}
+
 			return (
 				<LazyMotion features={domAnimation}>
 					<m.li
+						variants={itemVariants}
 						ref={(el) => (itemRefs.current[i] = el)}
 						class="char__item"
 						key={item.id}
@@ -67,8 +85,6 @@ const CharList = (props) => {
 								onFocusItem(i);
 							}
 						}}
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
 					>
 						<img style={imgStyle} src={item.thumnail} alt={item.name} />
 						<div class="char__name">{item.name}</div>
@@ -77,7 +93,13 @@ const CharList = (props) => {
 			);
 		});
 
-		return <ul class="char__grid">{items}</ul>;
+		return (
+			<LazyMotion features={domAnimation}>
+				<m.ul initial="hidden" animate="visible" variants={listVariants} className="char__grid">
+					{items}
+				</m.ul>
+			</LazyMotion>
+		);
 	}
 
 	const items = renderList(posts);

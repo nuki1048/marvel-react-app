@@ -1,9 +1,12 @@
 import React from "react";
+import { motion } from "framer-motion";
+
 import ErrorMessage from "../../errorMessage/ErrorMessage";
 import { Link } from "react-router-dom";
+import AnimatedComponent from "../../animatedComponent/AnimatedComponent";
 const Page404 = () => {
 	return (
-		<div>
+		<AnimatedComponent>
 			<ErrorMessage />
 			<p style={{ textAlign: "center", fontWeight: "bold", fontSize: "24px", marginTop: "30px" }}>Page does'nt exist</p>
 			<Link
@@ -19,7 +22,7 @@ const Page404 = () => {
 			>
 				Back to main page
 			</Link>
-		</div>
+		</AnimatedComponent>
 	);
 };
 
