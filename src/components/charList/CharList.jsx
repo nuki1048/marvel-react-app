@@ -18,6 +18,7 @@ const CharList = (props) => {
 
 	useEffect(() => {
 		onRequest(offset, true);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	// useEffect(() => {
@@ -40,6 +41,7 @@ const CharList = (props) => {
 		setPosts((posts) => [...posts, ...newPosts]);
 		setNewItemLoading((newItemLoading) => false);
 		setOffset((offset) => offset + 9);
+
 		setCharEnded((charEnded) => ended);
 	};
 
@@ -112,6 +114,7 @@ const CharList = (props) => {
 			{errorMessage}
 			{spinner}
 			{items}
+
 			<button
 				onClick={() => onRequest(offset)}
 				disabled={newItemLoading}
