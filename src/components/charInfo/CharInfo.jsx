@@ -11,102 +11,111 @@ import useMarvelService from "../../services/MarverService";
 import "./CharInfo.scss";
 
 const CharInfo = (props) => {
-	const [char, setChar] = useState(null);
+  const [char, setChar] = useState(null);
 
-	const { loading, error, getCharacter, clearError } = useMarvelService();
-	const listVariants = {
-		visible: { opacity: 1 },
-		hidden: { opacity: 0 },
-	};
+  const { loading, error, getCharacter, clearError } = useMarvelService();
+  const listVariants = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 },
+  };
 
-	useEffect(() => {
-		updateChar();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+  useEffect(() => {
+    updateChar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-	useEffect(() => {
-		updateChar();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.charId]);
+  useEffect(() => {
+    updateChar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.charId]);
 
-	const updateChar = () => {
-		if (!props.charId) {
-			return;
-		}
-		clearError();
-		getCharacter(props.charId).then(onCharLoaded);
-	};
+  const updateChar = () => {
+    if (!props.charId) {
+      return;
+    }
+    clearError();
+    getCharacter(props.charId).then(onCharLoaded);
+  };
 
-	const onCharLoaded = (char) => {
-		setChar(char);
-	};
+  const onCharLoaded = (char) => {
+    setChar(char);
+  };
 
-	const skeleton = char || loading || error ? null : <Skeleton />;
-	const errorMessage = error ? <ErrorMessage /> : null;
-	const spinner = loading ? <Spinner /> : null;
-	const content = !(loading || error || !char) ? <View char={char} /> : null;
-	return (
-		<LazyMotion features={domAnimation}>
-			<m.div initial="hidden" animate="visible" variants={listVariants} className="char__info">
-				{skeleton}
-				{errorMessage}
-				{spinner}
-				{content}
-			</m.div>
-		</LazyMotion>
-	);
+  const skeleton = char || loading || error ? null : <Skeleton />;
+  const errorMessage = error ? <ErrorMessage /> : null;
+  const spinner = loading ? <Spinner /> : null;
+  const content = !(loading || error || !char) ? <View char={char} /> : null;
+
+  return (
+    <LazyMotion features={domAnimation}>
+      <m.div
+        initial="hidden"
+        animate="visible"
+        variants={listVariants}
+        className="char__info"
+      >
+        {skeleton}
+        {errorMessage}
+        {spinner}
+        {content}
+      </m.div>
+    </LazyMotion>
+  );
 };
 
 const View = ({ char }) => {
-	const { name, descr, thumnail, homepage, wiki, comics } = char;
-	let imgStyle = { objectFit: "cover" };
-	if (thumnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
-		imgStyle = { objectFit: "unset" };
-	}
-	const itemVariants = {
-		visible: { opacity: 1, y: 0 },
-		hidden: { opacity: 0, y: 100 },
-	};
+  const { name, descr, thumnail, homepage, wiki, comics } = char;
+  let imgStyle = { objectFit: "cover" };
+  if (
+    thumnail ===
+    "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+  ) {
+    imgStyle = { objectFit: "unset" };
+  }
+  const itemVariants = {
+    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 100 },
+  };
 
-	return (
-		<LazyMotion features={domAnimation}>
-			<m.div variants={itemVariants}>
-				<div className="char__basics">
-					<img style={imgStyle} src={thumnail} alt="abyss" />
-					<div>
-						<div className="char__info-name">{name}</div>
-						<div className="char__btns">
-							<a href={homepage} className="button button__main">
-								<div className="inner">homepage</div>
-							</a>
-							<a href={wiki} className="button button__secondary">
-								<div className="inner">Wiki</div>
-							</a>
-						</div>
-					</div>
-				</div>
-				<div className="char__descr">{descr}</div>
-				<div className="char__comics">Comics:</div>
-				<ul className="char__comics-list">
-					{comics.length === 0
-						? "This character has no comics"
-						: comics.map((item, i) => {
-								// eslint-disable-next-line array-callback-return
-								if (i > 9) return;
-								return (
-									<li key={i} className="char__comics-item">
-										<a className="char__comics-link" href={item.resourceURI}>
-											{item.name}
-										</a>
-									</li>
-								);
-						  })}
-				</ul>
-			</m.div>
-		</LazyMotion>
-	);
+  return (
+    <LazyMotion features={domAnimation}>
+      <m.div variants={itemVariants}>
+        <div className="char__basics">
+          <img style={imgStyle} src={thumnail} alt="abyss" />
+          <div>
+            <div className="char__info-name">{name}</div>
+            <div className="char__btns">
+              <a href={homepage} className="button button__main">
+                <div className="inner">homepage</div>
+              </a>
+              <a href={wiki} className="button button__secondary">
+                <div className="inner">Wiki</div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="char__descr">{descr}</div>
+        <div className="char__comics">Comics:</div>
+        <ul className="char__comics-list">
+          {comics.length === 0
+            ? "This character has no comics"
+            : comics.map((item, i) => {
+                // eslint-disable-next-line array-callback-return
+                if (i > 9) return;
+                return (
+                  <li key={i} className="char__comics-item">
+                    <a className="char__comics-link" href={item.resourceURI}>
+                      {item.name}
+                    </a>
+                  </li>
+                );
+              })}
+        </ul>
+      </m.div>
+    </LazyMotion>
+  );
 };
 CharInfo.propTypes = {
-	charId: PropTypes.number,
+  charId: PropTypes.number,
 };
 export default CharInfo;
