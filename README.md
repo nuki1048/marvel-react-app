@@ -25,5 +25,8 @@ And a few more libs for ID generator, props check, etc.
 *Click in any tab you want* like HTTPS, SSH or GitHub CLI, and copy the text on input. <br>
 3.Now open the IDE and paste this link into terminal  <br>(p.s If you copy HTTPS or SSH you need before the link add the words *"git clone"*)
 <br>
+
+4.Click the *enter* button on your keyboard.<br>
+<br>
 <br>
 **And that's it, you copy it into your computer repository**🎉🎊
